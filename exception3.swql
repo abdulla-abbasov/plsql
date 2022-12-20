@@ -1,0 +1,76 @@
+declare
+v_id number:=1;
+
+begin
+update employees set salary=salary+100 where employee_id=v_id;
+
+dbms_output.put_line(sql%rowcount);
+
+end;
+
+--declare exception
+
+declare
+v_emp_id number:=1;
+invalid_data exception;
+
+begin
+update employees set salary=2000 where employee_id=v_emp_id;
+
+dbms_output.put_line(sqlcode);
+dbms_output.put_line(sqlerrm);
+
+if sql%notfound then
+raise invalid_data;
+end if;
+exception
+when invalid_data then
+dbms_output.put_line('invalid data');
+dbms_output.put_line(sqlcode);
+
+end;
+
+
+
+
+--
+declare
+v_emp_id number:=1;
+begin
+update employees set salary=2000 where employee_id=v_emp_id;
+
+if sql%notfound then
+raise_application_error(-20000,'data not found');
+end if;
+end;
+
+declare
+
+v_sam_sal number;
+no_data exception;
+
+begin
+select sum(salary) into v_sam_sal  from employees where department_id=&dno;
+
+if v_sam_sal is not null then
+dbms_output.put_line('sum salary is: '||v_sam_sal);
+else
+raise no_data;
+end if;
+
+exception 
+when no_data then
+dbms_output.put_line('no data');
+
+end;
+
+
+
+-----
+
+
+
+
+
+
+

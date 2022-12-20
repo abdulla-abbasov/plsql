@@ -1,0 +1,38 @@
+
+
+
+--2----
+declare
+v_date date:=sysdate;
+v_no number:=10*2;
+v_pi constant number:=3.14;
+
+
+begin
+
+dbms_output.put_line(v_date);
+dbms_output.put_line(v_no);
+dbms_output.put_line(v_pi);
+
+v_date:=v_date+10;
+
+dbms_output.put_line(v_date);
+
+end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

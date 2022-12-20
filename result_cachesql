@@ -1,0 +1,129 @@
+create or replace function get_sum_total_salary (dept_id number)
+ return number result_cache
+ is
+ sum_sal number;
+ begin
+ select sum(salary) into sum_sal from employees where department_id=dept_id;
+ 
+ return sum_sal;
+ end;
+ 
+ 
+ 
+ 
+----- 
+select get_sum_total_salary(10) from dual;
+select get_sum_total_salary(20) from dual;
+select get_sum_total_salary(30) from dual;
+
+--  when execute depid 10 ist going to be execute faster thane others
+
+select get_sum_total_salary(10) from dual;
+
+
+
+create or replace function get_sum_total_salary (dept_id number)
+ return number result_cache relies_on(employees)
+ is
+ sum_sal number;
+ begin
+ select sum(salary) into sum_sal from employees where department_id=dept_id;
+ 
+ return sum_sal;
+ end;
+
+
+
+
+--- bulk binding
+
+
+-- bulk binding only used in collections rememerber it;
+
+declare
+type namesarray is varray(5) of varchar2(100);
+type grades is varray(5) of number(20);
+v_names namesarray;
+marks grades;
+total integer;
+begin
+v_names:=namesarray('Abdulla','Nurlan','Ayten','Aynure','Ilham');
+marks:=grades(60,70,80,90,100);
+total:=v_names.count;
+for i in 1..total
+loop
+dbms_output.put_line('Student'||v_names(i)||'stundents marks'||marks(i));
+end loop;
+end;
+
+
+
+
+
+
+
+select * from employees where employee_id in (100,101,102);
+
+
+create or replace procedure update_salary_withoutbulk(p_amount number)
+is
+
+type emp_table_type is table of number index by binary_integer;
+emp_table emp_table_type;
+
+begin
+
+emp_table(1):=100;
+emp_table(1):=101;
+emp_table(1):=102;
+for i in emp_table.first..emp_table.last
+loop
+update employees set salary=salary+p_amount where employee_id=emp_table(i);
+end loop;
+
+commit;
+end;
+
+
+execute update_salary_withoutbulk(10);
+
+select * from employees where employee_id in (100,101,102);
+
+
+
+create or replace procedure update_salary_withoutbulk(p_amount number)
+is
+
+type emp_table_type is table of number index by binary_integer;
+emp_table emp_table_type;
+
+begin
+
+emp_table(1):=100;
+emp_table(1):=101;
+emp_table(1):=102;
+forall i in emp_table.first..emp_table.last
+
+update employees set salary=salary+p_amount where employee_id=emp_table(i);
+
+
+commit;
+end;
+
+
+
+
+
+---
+desc employees;
+create table e_name as 
+select distinct first_name from employees;
+
+
+select * from e_name;
+
+
+
+
+
+
